@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto Quest | Carta do Tesouro</title>
+  <link rel="stylesheet" href="Style.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Projeto Quest</h1>
+      <p class="subtitle">Carta náutica das terras desconhecidas</p>
+    </div>
+    <div id="accountControls" class="account-controls hidden">
+      <span id="accountEmail"></span>
+      <button id="logoutButton" type="button" class="account-button">Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="map" aria-label="Mapa interativo"></div>
+    <div id="status" role="status">Carregando mapa...</div>
+
+    <section id="authPanel" class="auth-panel hidden" aria-labelledby="authTitle">
+      <div class="auth-content">
+        <p class="auth-kicker">Projeto Quest</p>
+        <h2 id="authTitle">Entre na sua carta</h2>
+        <p id="authDescription">Acesse seus waypoints salvos.</p>
+        <form id="authForm">
+          <label for="authEmail">E-mail</label>
+          <input id="authEmail" name="email" type="email" autocomplete="email" maxlength="254" required />
+          <label for="authPassword">Senha</label>
+          <input id="authPassword" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="72" required />
+          <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
+          <button id="authSubmit" type="submit">Entrar</button>
+        </form>
+        <button id="authSwitch" type="button" class="auth-switch">Criar uma conta</button>
+      </div>
+    </section>
+
+    <div id="mapTools" class="map-tools" aria-label="Ferramentas da carta"></div>
+
+    <section id="routePanel" class="route-panel hidden" aria-labelledby="routeTitle">
+      <div class="panel-header">
+        <div>
+          <p class="route-kicker">Navegação da tripulação</p>
+          <h2 id="routeTitle">Planejar rota</h2>
+        </div>
+        <button id="closeRoutes" type="button" class="close-button" aria-label="Fechar rotas">×</button>
+      </div>
+      <form id="routeForm" class="route-form">
+        <label for="routeOrigin">Origem</label>
+        <div class="route-input-row">
+          <input id="routeOrigin" name="origin" list="waypointSuggestions" placeholder="Endereço ou waypoint" autocomplete="off" required />
+          <button id="useCurrentPosition" type="button" class="route-location-button" aria-label="Usar minha posição como origem" title="Usar minha posição">◎</button>
+        </div>
+        <label for="routeDestination">Destino</label>
+        <input id="routeDestination" name="destination" list="waypointSuggestions" placeholder="Endereço ou waypoint" autocomplete="off" required />
+        <datalist id="waypointSuggestions"></datalist>
+        <label for="routeMode">Meio de transporte</label>
+        <select id="routeMode" name="travelMode"></select>
+        <div class="route-actions">
+          <button id="clearRoute" type="button" class="secondary-button">Limpar</button>
+          <button id="calculateRoute" type="submit">Traçar rota</button>
+        </div>
+      </form>
+      <p id="routeStatus" class="route-status" role="status" aria-live="polite"></p>
+      <section id="routeResults" class="route-results hidden" aria-label="Detalhes da rota">
+        <div id="routeSummary" class="route-summary"></div>
+        <ol id="routeSteps" class="route-steps"></ol>
+      </section>
+    </section>
+
+    <form id="mapSearch" class="map-search hidden" role="search">
+      <div class="panel-header">
+        <label class="search-label" for="mapSearchInput">Consultar a carta</label>
+        <button id="closeSearch" type="button" class="close-button" aria-label="Minimizar pesquisa">×</button>
+      </div>
+      <div class="search-row">
+        <input id="mapSearchInput" type="search" placeholder="Digite uma rua, cidade ou local..." autocomplete="off" aria-label="Pesquisar rua, cidade, país ou waypoint" />
+        <button type="submit" class="search-button" aria-label="Pesquisar no mapa" title="Pesquisar">⌕</button>
+      </div>
+      <p id="searchMessage" class="search-message" aria-live="polite">Escolha uma sugestão real para localizar com precisão.</p>
+    </form>
+
+    <div id="waypointPanel" class="waypoint-panel hidden" aria-live="polite">
+      <div class="panel-header">
+        <h2 id="waypointPanelTitle">Novo waypoint</h2>
+        <button id="closeWaypointPanel" type="button" class="close-button" aria-label="Fechar painel">×</button>
+      </div>
+
+      <form id="waypointForm">
+        <input type="hidden" name="id" />
+
+        <label>
+          Nome do local
+          <input type="text" name="name" placeholder="Ex.: Santuário da Bruma" required />
+        </label>
+
+        <label>
+          Tipo
+          <select name="type"></select>
+        </label>
+
+        <label>
+          Sinalizador
+          <select name="signal"></select>
+        </label>
+
+        <label>
+          Descrição da ficha
+          <textarea name="description" rows="3" placeholder="Descreva o local, o perigo, a energia ou a estrutura do lugar..."></textarea>
+        </label>
+
+        <div class="coordinates-row">
+          <label>
+            Nível de perigo
+            <select name="danger"></select>
+          </label>
+          <label>
+            Recompensa
+            <input type="text" name="reward" placeholder="Ex.: Poção rara" />
+          </label>
+        </div>
+
+        <label>
+          Missão / Quest relacionada
+          <input type="text" name="quest" placeholder="Ex.: Encontrar o sinal dos antigos" />
+        </label>
+
+        <label>
+          NPCs / criaturas presentes
+          <input type="text" name="npcs" placeholder="Ex.: Guardiões do templo, 3 mercadores" />
+        </label>
+
+        <div class="coordinates-row">
+          <label>
+            Latitude
+            <input type="number" name="lat" step="any" placeholder="-26.4852" />
+          </label>
+          <label>
+            Longitude
+            <input type="number" name="lng" step="any" placeholder="-49.0714" />
+          </label>
+        </div>
+
+        <div class="panel-actions">
+          <button type="button" id="useMapCenter" class="secondary-button">Usar centro do mapa</button>
+          <button type="button" id="clickMapWaypoint" class="secondary-button">Clique no mapa</button>
+          <button type="submit">Salvar waypoint</button>
+        </div>
+      </form>
+    </div>
+
+    <button id="locateButton" type="button" aria-label="Encontrar minha posição" title="Encontrar minha posição">
+      <span class="compass" aria-hidden="true">
+        <span class="compass-north">N</span>
+        <span class="compass-needle"></span>
+      </span>
+    </button>
+  </main>
+
+  <footer>✦ Carta do Tesouro · Navegue por sua própria conta e risco ✦</footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
